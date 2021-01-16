@@ -167,6 +167,7 @@ if (!defined('EMAIL_ON_ERROR')) define('EMAIL_ON_ERROR', false);
 if (!isset($_GET['sat']) || $_GET['sat'] !== SECRET_ACCESS_TOKEN || SECRET_ACCESS_TOKEN === 'BetterChangeMeNowOrSufferTheConsequences') {
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
 }
+
 ob_start();
 ?>
 <!DOCTYPE html>
@@ -201,6 +202,21 @@ Checking the environment ...
 Running as <b><?php echo trim(shell_exec('whoami')); ?></b>.
 
 <?php
+
+/**
+ * For long running deploys and BitBucket webhooks (10 sec timeout)
+ */
+if (!isset($_GET['verbose'])) {
+    echo "Verbose not set. Passed authentication. Returning success to prevent timeout.";
+    $size = ob_get_length();
+    header("Content-Encoding: none");
+    header("Content-Length: {$size}");
+    header("Connection: close");
+    ob_end_flush();
+    ob_flush();
+    flush();
+}
+
 // Check if the required programs are available
 $requiredBinaries = array('git', 'rsync');
 if (defined('BACKUP_DIR') && BACKUP_DIR !== false) {
