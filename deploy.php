@@ -246,10 +246,6 @@ to        <?php echo TARGET_DIR; ?> ...
  */
 if (!isset($_GET['verbose'])) {
     echo "Verbose not set. Passed authentication and environment check. Returning success to prevent timeout.";
-    $size = ob_get_length();
-    header('Content-type: text/plain; charset=utf-8');
-    header("Content-Length: {$size}");
-    header("Connection: close");
     ob_end_flush();
     ob_flush();
     flush();
