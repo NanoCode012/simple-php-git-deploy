@@ -205,20 +205,6 @@ Running as <b><?php echo trim(shell_exec('whoami')); ?></b>.
 
 <?php
 
-/**
- * For long running deploys and BitBucket webhooks (10 sec timeout)
- */
-if (!isset($_GET['verbose'])) {
-    echo "Verbose not set. Passed authentication. Returning success to prevent timeout.";
-    $size = ob_get_length();
-    header("Content-Encoding: none");
-    header("Content-Length: {$size}");
-    header("Connection: close");
-    ob_end_flush();
-    ob_flush();
-    flush();
-}
-
 // Check if the required programs are available
 $requiredBinaries = array('git', 'rsync');
 if (defined('BACKUP_DIR') && BACKUP_DIR !== false) {
@@ -254,6 +240,21 @@ Deploying <?php echo REMOTE_REPOSITORY; ?> <?php echo BRANCH."\n"; ?>
 to        <?php echo TARGET_DIR; ?> ...
 
 <?php
+
+/**
+ * For long running deploys and BitBucket webhooks (10 sec timeout)
+ */
+if (!isset($_GET['verbose'])) {
+    echo "Verbose not set. Passed authentication and environment check. Returning success to prevent timeout.";
+    $size = ob_get_length();
+    header('Content-type: text/plain; charset=utf-8');
+    header("Content-Length: {$size}");
+    header("Connection: close");
+    ob_end_flush();
+    ob_flush();
+    flush();
+}
+
 // The commands
 $commands = array();
 
