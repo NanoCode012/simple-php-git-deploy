@@ -9,7 +9,7 @@
  * That way, you won't have to edit the configuration again if you download the
  * new version of `deploy.php`.
  *
- * @version 1.3.1
+ * @version 1.4.0
  */
 
 /**
@@ -36,7 +36,7 @@ define('REMOTE_REPOSITORY', 'https://github.com/NanoCode012/simple-php-git-deplo
  *
  * @var string
  */
-define('BRANCH', 'master');
+define('BRANCH', 'main');
 
 /**
  * The location that the code is going to be deployed to.
@@ -68,7 +68,9 @@ define('DELETE_FILES', false);
  * @var serialized array of strings
  */
 define('EXCLUDE', serialize(array(
-	'.git',
+    '.git',
+    'README.md',
+    'LICENSE'
 )));
 
 /**
