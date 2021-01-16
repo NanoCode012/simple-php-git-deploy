@@ -28,7 +28,7 @@ define('SECRET_ACCESS_TOKEN', 'BetterChangeMeNowOrSufferTheConsequences');
  *
  * @var string
  */
-define('REMOTE_REPOSITORY', 'https://github.com/markomarkovic/simple-php-git-deploy.git');
+define('REMOTE_REPOSITORY', 'https://github.com/NanoCode012/simple-php-git-deploy.git');
 
 /**
  * The branch that's being deployed.
