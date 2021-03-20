@@ -5,7 +5,7 @@
  *
  * Automatically deploy the code using PHP and Git.
  *
- * @version 1.4.1
+ * @version 1.5.0
  * @link    https://github.com/NanoCode012/simple-php-git-deploy/
  */
 

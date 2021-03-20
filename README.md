@@ -1,6 +1,12 @@
 # Simple PHP Git deploy script
 _Automatically deploy the code using PHP and Git._
 
+## My Changes
+
+* Added a verbose option, so the server will return a pre-mature success message to Github to counteract the 10 second timeout
+* Added option to use `secret` in Github to increase security
+* Updated code to mitigate timing attacks
+
 ## Requirements
 
 * `git` and `rsync` are required on the server that's running the script
@@ -31,7 +37,10 @@ _Automatically deploy the code using PHP and Git._
     SSH key.
  1. Go to `https://github.com/USERNAME/REPOSITORY/settings/hooks`.
  1. Click **Add webhook** in the **Webhooks** panel.
- 1. Enter the **Payload URL** for your deployment script e.g. `http://example.com/deploy.php?sat=YourSecretAccessTokenFromDeployFile`.
+ 1. Choose one of the options below 
+    * _(**Preferred**)_ Set the **Content type** to `application/json`, set **Secret** to `YourSecretAccessTokenFromDeployFile`, and enter the **Payload URL** for your deployment script e.g. `https://example.com/deploy.php`
+
+    * Enter the **Payload URL** with the `SecretAccessToken` for your deployment script e.g. `https://example.com/deploy.php?sat=YourSecretAccessTokenFromDeployFile` 
  1. _Optional_ Choose which events should trigger the deployment.
  1. Make sure that the **Active** checkbox is checked.
  1. Click **Add webhook**.
