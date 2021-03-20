@@ -164,11 +164,24 @@ if (!defined('COMPOSER_HOME')) define('COMPOSER_HOME', false);
  */
 if (!defined('EMAIL_ON_ERROR')) define('EMAIL_ON_ERROR', false);
 
+// Check if contains X_HUB_SIGNATURE_256 and matches with secret
+if (isset($_SERVER["HTTP_X_HUB_SIGNATURE_256"])) {
+    list($algo, $token) = explode("=", $_SERVER["HTTP_X_HUB_SIGNATURE_256"], 2) + array("", "");
+
+    $payload = file_get_contents('php://input');
+    $signature = hash_hmac($algo, $payload, SECRET_ACCESS_TOKEN);
+    $token_hash_verified = hash_equals($signature, $token);
+}
+
 // ===========================================[ Configuration end ]===
 
-// If there's authorization error, set the correct HTTP header.
-if (!isset($_GET['sat']) || $_GET['sat'] !== SECRET_ACCESS_TOKEN || SECRET_ACCESS_TOKEN === 'BetterChangeMeNowOrSufferTheConsequences') {
+// If there's authorization error, set the correct HTTP header and die.
+if (
+    (!isset($_GET['sat']) || !hash_equals($_GET['sat'], SECRET_ACCESS_TOKEN))
+    && (!isset($token_hash_verified) || !$token_hash_verified)
+) {
     header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
+    die('<h2>ACCESS DENIED!</h2>');
 }
 
 ob_start();
@@ -208,10 +221,6 @@ ob_start();
 
 <body>
     <?php
-    if (!isset($_GET['sat']) || $_GET['sat'] !== SECRET_ACCESS_TOKEN) {
-        header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
-        die('<h2>ACCESS DENIED!</h2>');
-    }
     if (SECRET_ACCESS_TOKEN === 'BetterChangeMeNowOrSufferTheConsequences') {
         header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
         die("<h2>You're suffering the consequences!<br>Change the SECRET_ACCESS_TOKEN from it's default value!</h2>");
