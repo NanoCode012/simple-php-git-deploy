@@ -5,7 +5,7 @@
  *
  * Automatically deploy the code using PHP and Git.
  *
- * @version 1.5.0
+ * @version 1.5.1
  * @link    https://github.com/NanoCode012/simple-php-git-deploy/
  */
 
@@ -224,6 +224,14 @@ ob_start();
     if (SECRET_ACCESS_TOKEN === 'BetterChangeMeNowOrSufferTheConsequences') {
         header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
         die("<h2>You're suffering the consequences!<br>Change the SECRET_ACCESS_TOKEN from it's default value!</h2>");
+    }
+
+    if (isset($payload)) {
+        $payload = json_decode($payload);
+        if ($payload->ref != 'refs/heads/' . BRANCH) {
+            header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK', true, 200);
+            exit('The ref branch does not match the target branch ' . BRANCH . '<br>');
+        }
     }
     ?>
     <pre>
